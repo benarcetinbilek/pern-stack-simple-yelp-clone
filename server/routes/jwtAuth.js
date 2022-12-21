@@ -14,6 +14,7 @@ router.post("/register", validInfo, async (req, res) => {
         const user = await pool.query("SELECT * FROM users WHERE user_email = $1", [email])
         if (user.rows.length) {
             return res.status(401).send("user already exist")
+            console.log("registerif");
         }
         //.3 bcrypt the user password
         const salt = await bcrypt.genSalt(10)
@@ -24,6 +25,8 @@ router.post("/register", validInfo, async (req, res) => {
         )
         //5.generating jwt token
         const token = jwtGenerator(newUser.rows[0].user_id)
+        console.log("register");
+        const response = res.send({token})
     } catch (error) {
         console.log(error)
         res.status(500).send("server error")

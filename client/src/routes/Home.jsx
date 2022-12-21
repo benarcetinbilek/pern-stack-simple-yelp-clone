@@ -4,8 +4,10 @@ import Header from '../components/Header'
 import RestaurantList from '../components/RestaurantList'
 
 function Home() {
+
   return (
     <div>
+      <p></p>
       <Header />
       <AddRestaurant />
       <RestaurantList />
