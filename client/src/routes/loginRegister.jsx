@@ -21,6 +21,32 @@ const LoginRegister = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     try {
+      if(loginOrRegister === 'login'){
+        fetch("http://localhost:4000/auth/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          email: inputs.email,
+          password: inputs.password
+        })
+      })
+      .then((response)=>{response.json()})
+      .then((d)=>{console.log(d);})
+      }else{
+        fetch("http://localhost:4000/auth/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          name: inputs.name,
+          email: inputs.email,
+          password: inputs.password
+        })
+      })
+      .then((response)=>{response.json()})
+      .then((d)=>{console.log(d);})
+      }
+      
+      /*
       console.log("qwe")
       fetch("http://localhost:4000/auth/register", {
         method: "POST",
@@ -33,6 +59,7 @@ const LoginRegister = () => {
       })
       .then((response)=>{response.json()})
       .then((d)=>{console.log(d);})
+      */
     } catch (error) {
       console.log(error);
     }
