@@ -51,7 +51,7 @@ const LoginRegister = () => {
                     value={inputs.name}
                     onChange= {handleChange}
                     name="name"
-                    type="email"
+                    type="text"
                     className="form-control mt-1"
                     placeholder="e.g Jane Doe"
                     />
