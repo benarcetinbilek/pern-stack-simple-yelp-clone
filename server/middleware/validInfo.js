@@ -1,6 +1,7 @@
 module.exports = function(req, res, next) {
     const { email, name, password } = req.body;
     console.log("validinfo");
+    console.log(req.path);
     function validEmail(userEmail) {
       return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userEmail);
     }

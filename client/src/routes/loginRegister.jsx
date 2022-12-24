@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { RestaurantsContext } from '../context/RestaurantsContext'
 
 const LoginRegister = () => {
 
   const navigate = useNavigate()
 
+  const {isAuthenticated, setIsAuthenticated, inputs, setInputs} = useContext(RestaurantsContext)
+
   const [loginOrRegister, setLoginOrRegister] = useState("login")
-  const [inputs, setInputs] = useState({
-    name: "",
-    email: "",
-    password: ""
-  })
+  
 
   const handleChange = (e) => {
     const value = e.target.value
@@ -18,21 +17,63 @@ const LoginRegister = () => {
     setInputs({...inputs, [name]: value})
   }
 
-  const handleSubmit = (e) => {
+  useEffect(()=>{
+    const refreshPage = async () => {
+      try {
+        
+        const response = await fetch("http://localhost:4000/auth/is-verify", {
+          method: "GET",
+          headers: {token: localStorage.token}
+        })
+        const parseRes = await response.json()
+        if(parseRes ===true) {  
+          setIsAuthenticated(true)
+          navigate(`/`)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    refreshPage()
+  },[])
+
+  
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      console.log("qwe")
-      fetch("http://localhost:4000/auth/register", {
+      if(loginOrRegister === 'login'){
+        const response = await fetch("http://localhost:4000/auth/login", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-          name: inputs.name,
           email: inputs.email,
           password: inputs.password
         })
       })
-      .then((response)=>{response.json()})
-      .then((d)=>{console.log(d);})
+        const parseRes = await response.json()
+        localStorage.setItem("token", parseRes.token)
+        if (parseRes.token){
+          setIsAuthenticated(true)
+          navigate("/")
+        }
+      }else{
+        const response = await fetch("http://localhost:4000/auth/register", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            name: inputs.name,
+            email: inputs.email,
+            password: inputs.password
+          })
+        })
+        const parseRes = await response.json()
+        localStorage.setItem("token", parseRes.token)
+        if (parseRes.token){
+          setIsAuthenticated(true)
+          navigate("/")
+        }
+        }
     } catch (error) {
       console.log(error);
     }
@@ -51,7 +92,7 @@ const LoginRegister = () => {
                     value={inputs.name}
                     onChange= {handleChange}
                     name="name"
-                    type="email"
+                    type="text"
                     className="form-control mt-1"
                     placeholder="e.g Jane Doe"
                     />

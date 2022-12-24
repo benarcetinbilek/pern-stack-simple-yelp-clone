@@ -23,13 +23,22 @@ function RestaurantList() {
         fetchData()
     },[])
 
-    const handleRestaurantSelect = (id) => {
-        navigate(`/restaurants/${id}`)
+    const handleRestaurantSelect = async (id) => {
+        const response = await fetch("http://localhost:4000/auth/is-verify", {
+            method: "GET",
+            headers: {token: localStorage.token}
+        })
+        const parseRes = await response.json()
+        if(parseRes) {  
+            navigate(`/restaurants/${id}`)
+        }
     }
 
     const handleUpdate = (e, id) => {
         e.stopPropagation()
+        
         navigate(`/restaurants/${id}/update`)
+        
     }
     
     const handleDelete = async (e, id) => {

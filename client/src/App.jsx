@@ -7,7 +7,7 @@ import UpdatePage from './routes/UpdatePage'
 import LoginRegister from './routes/loginRegister'
 import PrivateRoutes from "./routes/privateRoutes"
 
-const App = (props) => {
+const App = () => {
     
     return (
         <RestaurantsContextProvider>
